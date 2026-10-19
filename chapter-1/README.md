@@ -24,7 +24,9 @@ Step 3. I dig further and investigate the lone storage account to see why this r
 
 ![Screenshot of an Azure storage account 'Tags' dashboard](image-3.png)
 
-to be continued...
+Step 4. I wanted to review the RG's deployments to see why this storage account resource was successful in being created while avoiding any naming convention rules in place. 
+
+![Screenshot of an Azure resource group's deployments dashboard](image-4.png)
 
 <!--
 ## What broke / what surprised me
