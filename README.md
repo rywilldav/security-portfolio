@@ -5,7 +5,7 @@ Documented cloud security investigations, built in a live Azure tenant
 
 Target role: Cloud Security Engineer / Security Analyst
 Currently: Software Engineer | Remote
-Contact: rywilldav@gmail.com · [LinkedIn](https://www.linkedin.com/in/ryanwilliam-davis/)
+Contact: rywilldav@gmail.com · [LinkedIn](https://www.linkedin.com/in/rywilldav/)
 
 ## Investigations
 | # | Title | Focus | Documentation |
