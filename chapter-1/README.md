@@ -1,7 +1,7 @@
 # Operation Dead Deploy: Investigating an unauthorized resource deployment
 
 ## Scenario
-Two days ago, a junior intern at Mad Hat Labs was given temporary contributor access to spin up a "test environment" for an experiment that would not be presented to leadership. The intern was not familiar with the company's governance standards and they cut several corners. They deployed quickly and left for the weekend. You are the on-call Azure engineer who came in Monday morning and found this in the subscription. Your job is to assess the damage, identify what governance failed, and document the evidence.
+Two days ago, a junior intern at Mad Hat Labs was given temporary contributor access to spin up a "test environment" for an experiment that would not be presented to leadership. The intern was not familiar with the company's governance standards and they cut several corners. They deployed quickly and left for the weekend. I was the on-call Azure engineer who came in Monday morning and found this in the subscription. My job was to assess the damage, identify what governance failed, and document the evidence.
 
 ## Environment
 Live multi-user Azure **training** tenant with Reader access. Investigating resource groups, tags and naming conventions.
