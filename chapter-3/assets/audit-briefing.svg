@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1175" height="270" viewBox="0 0 1175 270">
+  <g font-family="Courier New, monospace" fill="#ffffff">
+    
+    <!-- Matrix green vertical border -->
+    <path d="M 10 15 V 255" stroke="#00ff41" stroke-width="4" fill="none"/>
+
+    <!-- Heading -->
+    <text x="45" y="40" font-size="14" letter-spacing="3">
+      [ CLASSIFIED // AUDIT BRIEFING ]
+    </text>
+
+    <!-- Case details -->
+    <text x="45" y="85" font-size="15">CASE: THE PRIVILEGE AUDIT</text>
+    <text x="45" y="115" font-size="15">TENANT: Mad Hat Labs</text>
+    <text x="45" y="145" font-size="15">STATUS: FIELD AUDIT IN PROGRESS</text>
+    <text x="45" y="175" font-size="15">CLEARANCE: OPERATIVE (Reader)</text>
+
+    <!-- Objective -->
+    <text x="45" y="215" font-size="15">
+      OBJECTIVE: Walk through the privilege access audit. Recover the security team's finding at each stage.
+    </text>
+    <text x="45" y="245" font-size="15">
+      Confirm the culprit.
+    </text>
+
+  </g>
+</svg>
