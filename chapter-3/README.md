@@ -1,15 +1,21 @@
 # The Privilege Audit
 
-## **Microsoft Azure RBAC | Identity & Access Management
+## Azure Role-Based Access Control (RBAC) | Identity & Access Management | Azure CLI | Privileged Identity Management (PIM)
 
 ![Classified Audit Briefing](assets/audit-briefing.svg)
-## Scenario
-2 to 3 sentences. What was the situation and what question did the investigation answer? Frame it like a work ticket, not homework.
 
-## Environment
-One list: platform, services, tools, access level. Honest framing: "live multi-user Azure training tenant, Reader access."
+## 1. Executive Summary
+I conducted a privileged access management (PAM) audit within the Mad Hat Labs Azure tenant. My search was to find out who had access to what resources and why. 
 
-## Investigation
+More specifically I was assessing role-based access controls (RBAC), role assignments, least privilege and privileged identity management (PIM).
+
+## 2. Scope & Methodology
+**Environment:** Mad Hat Labs - a live Azure training tenant<br>
+**Access:** Reader access initially, activated to a PIM-eligible Operative account<br>
+**Tools**: Azure Portal, Azure CLI, Azure Resource Graph, Kusto Query Language (KQL), Privileged Identity Management (PIM)
+<!-- 
+## 3. Findings & Observations
+### Finding 01 - 
 The core. Numbered steps IN YOUR OWN WORDS: what you looked at, what you found, what you concluded at each step. 6 to 12 screenshots of meaningful moments (portal views, query results, before/after).
 
 ## What broke / what surprised me
