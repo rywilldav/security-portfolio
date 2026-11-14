@@ -1,6 +1,8 @@
 # The Privilege Audit
 
-<!--
+## **Microsoft Azure RBAC | Identity & Access Management
+
+![Classified Audit Briefing](assets/audit-briefing.svg)
 ## Scenario
 2 to 3 sentences. What was the situation and what question did the investigation answer? Frame it like a work ticket, not homework.
 
