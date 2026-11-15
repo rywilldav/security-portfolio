@@ -13,9 +13,16 @@ More specifically I was assessing role-based access controls (RBAC), role assign
 **Environment:** Mad Hat Labs - a live Azure training tenant<br>
 **Access:** Reader access initially, activated to a PIM-eligible Operative account<br>
 **Tools**: Azure Portal, Azure CLI, Azure Resource Graph, Kusto Query Language (KQL), Privileged Identity Management (PIM)
-<!-- 
+
 ## 3. Findings & Observations
 ### Finding 01 - 
+**Audit Methodology:** Identity and Access Management (IAM)
+
+I began the audit with a no-tooling approach first using the Access control (IAM) interface in the Azure portal. I exported the role assignments on my target subscription into a CSV file.
+
+
+
+<!-- 
 The core. Numbered steps IN YOUR OWN WORDS: what you looked at, what you found, what you concluded at each step. 6 to 12 screenshots of meaningful moments (portal views, query results, before/after).
 
 ## What broke / what surprised me
