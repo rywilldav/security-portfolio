@@ -16,13 +16,44 @@ More specifically I was assessing role-based access controls (RBAC), role assign
 
 ## 3. Findings & Observations
 ### Finding 01 - 
-**Audit Methodology:** Identity and Access Management (IAM)
+**Audit Methodology:**
+Identity and Access Management (IAM)
 
-I began the audit with a no-tooling approach first using the Access control (IAM) interface in the Azure portal. I exported the role assignments on my target subscription into a CSV file.
+I began the audit with a no-tooling approach first using the Access control (IAM) interface in the Azure portal. I exported the role assignments on my target subscriptions into a CSV file.
+
+Redactions outlined in red below signify the <u>same</u> user account with Owner access on *multiple* subscriptions.
+
+![Screenshot of an Azure role assignments export from IAM](images/figure01.png)
+<em>Figure 01 - Redacted export of IAM role assignments inside targeted Azure tenant subscriptions.</em>
+
+**Discovery:**<br>
+This one user having Owner permissions to multiple subscriptions raises a major concern with how they acquired these permissions in the first place. Was this user's permissions applied manually or through a re-occurring script?
+
+**Limitations:**<br>
+Given the methodology and my access level during this audit, my export did not authorize me to see the members inside of subscription groups, thus overlooking potential Owners inside of groups or potential orphaned users from deleted accounts.
+
+**Recommendation:**<br>
+Maintain a quarterly review with your security team to ensure that any unused, high-privileged accounts are removed and update any dynamic group scripts.
+<!--
+### Finding 02 - 
+**Audit Methodology:**
+Azure CLI
+
+I began the audit with a no-tooling approach first using the Access control (IAM) interface in the Azure portal. I exported the role assignments on my target subscriptions into a CSV file.
+
+Redactions outlined in red below signify the <u>same</u> user account with Owner access on *multiple* subscriptions.
+
+![Screenshot of a legacy app's Branding & properties page](images/figure01.png)
+<em>Figure 02 - </em>
+
+**Discovery:**<br>
 
 
+**Limitations:**<br>
 
-<!-- 
+
+**Recommendation:**<br>
+
 The core. Numbered steps IN YOUR OWN WORDS: what you looked at, what you found, what you concluded at each step. 6 to 12 screenshots of meaningful moments (portal views, query results, before/after).
 
 ## What broke / what surprised me
