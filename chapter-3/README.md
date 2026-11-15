@@ -35,11 +35,11 @@ Given the methodology and my access level during this audit, my export did not a
 **Recommendation:**<br>
 Maintain a quarterly review with your security team to ensure that any unused, high-privileged accounts are removed and update any dynamic group scripts.
 
-### Finding 02 — The hidden orphan account
+### Finding 02 — The orphan account
 **Audit Methodology:**
 Azure CLI
 
-Since I wanted access to the deleted "orphan" accounts that could be living in the tenant, I decided to run a Powershell command to iterate through a specific production group known to have a problem with orphaned accounts.<br>
+Since I wanted to investigate any deleted "orphan" accounts that could be living in the tenant, I decided to run a Powershell command to iterate through a specific resource group of which I had access.<br>
 <code>az role assignment list --resource-group rg-REDACTED</code>
 
 **Discovery:**<br>
@@ -47,14 +47,13 @@ The resulting information yielded a role assignment object that had an empty val
 
 ![Screenshot of Azure CLI role assignment command results](images/figure02.png)
 <em>Figure 02 - Screenshot of a role assignment of an orphaned user account with remaining permissions.</em>
-<!--
-**Limitations:**<br>
 
+**Limitations:**<br>
+The scope I was limited to allowed me to only iterate through this one specific resource group with the CLI.
 
 **Recommendation:**<br>
-
-The core. Numbered steps IN YOUR OWN WORDS: what you looked at, what you found, what you concluded at each step. 6 to 12 screenshots of meaningful moments (portal views, query results, before/after).
-
+The Powershell command I ran can be turned into a script and repeated often at a scope larger than what I had access to in order to keep up to date with the presence of orphan accounts with permissions linked to them. 
+<!--
 ## What broke / what surprised me
 The most credible section in the document. Dead ends, wrong guesses, the thing that took an hour. Employers know real work is messy. This section separates you from certificate collectors.
 
