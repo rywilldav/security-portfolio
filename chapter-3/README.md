@@ -15,11 +15,11 @@ More specifically I was assessing role-based access controls (RBAC), role assign
 **Tools**: Azure Portal, Azure CLI, Azure Resource Graph, Kusto Query Language (KQL), Privileged Identity Management (PIM)
 
 ## 3. Findings & Observations
-### Finding 01 - 
+### Finding 01 — Abundance of Owner role assignments 
 **Audit Methodology:**
 Identity and Access Management (IAM)
 
-I began the audit with a no-tooling approach first using the Access control (IAM) interface in the Azure portal. I exported the role assignments on my target subscriptions into a CSV file.
+I began the audit with a baseline no-tooling approach first using the Access control (IAM) interface in the Azure portal. I exported the role assignments on my target subscriptions into a CSV file.
 
 Redactions outlined in red below signify the <u>same</u> user account with Owner access on *multiple* subscriptions.
 
@@ -34,21 +34,20 @@ Given the methodology and my access level during this audit, my export did not a
 
 **Recommendation:**<br>
 Maintain a quarterly review with your security team to ensure that any unused, high-privileged accounts are removed and update any dynamic group scripts.
-<!--
-### Finding 02 - 
+
+### Finding 02 — The hidden orphan account
 **Audit Methodology:**
 Azure CLI
 
-I began the audit with a no-tooling approach first using the Access control (IAM) interface in the Azure portal. I exported the role assignments on my target subscriptions into a CSV file.
-
-Redactions outlined in red below signify the <u>same</u> user account with Owner access on *multiple* subscriptions.
-
-![Screenshot of a legacy app's Branding & properties page](images/figure01.png)
-<em>Figure 02 - </em>
+Since I wanted access to the deleted "orphan" accounts that could be living in the tenant, I decided to run a Powershell command to iterate through a specific production group known to have a problem with orphaned accounts.<br>
+<code>az role assignment list --resource-group rg-REDACTED</code>
 
 **Discovery:**<br>
+The resulting information yielded a role assignment object that had an empty value for it's principalName. This points towards a deleted "orphaned" account that still has permissions assigned to it.
 
-
+![Screenshot of Azure CLI role assignment command results](images/figure02.png)
+<em>Figure 02 - Screenshot of a role assignment of an orphaned user account with remaining permissions.</em>
+<!--
 **Limitations:**<br>
 
 
@@ -64,6 +63,5 @@ What you determined, plus 2 or 3 recommendations as if you were reporting to the
 
 ## What I learned
 3 to 5 bullets. At least one technical, one "what I'd do differently."
-
 
 -->
