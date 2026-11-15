@@ -62,20 +62,17 @@ I used the Azure Resource Graph Explorer to run a KQL query that would allow me 
 
 The KQL query that I ran was:<br>
 ![Screenshot of Azure Resource Graph running a KQL query](images/figure03.png)
+<em>Figure 03 - KQL query ran inside of a tenant's Azure Resource Graph filtering a specific principal id value.</em>
 
-<!--
 **Discovery:**<br>
-
-
-
-<em>Figure 02 - Screenshot of a role assignment of an orphaned user account with remaining permissions.</em>
+Using KQL, I am more quickly able to run a search on role assignments across all available scopes and return specific, filtered results.
 
 **Limitations:**<br>
-The scope I was limited to allowed me to only iterate through this one specific resource group with the CLI.
+While being able to iterate entire subscriptions' role assignments with one query, KQL does not render 'eligible' role assignments, only active assignments. 
 
 **Recommendation:**<br>
-The Powershell command I ran can be turned into a script and repeated often at a scope larger than what I had access to in order to keep up to date with the presence of orphan accounts with permissions linked to them. 
-
+Along with using IAM auditing and Azure CLI commands to observe recurring access, I recommend using customized versions of my KQL query above to help dig deeper.
+<!--
 
 
 
