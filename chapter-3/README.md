@@ -14,6 +14,14 @@ More specifically I was assessing role-based access controls (RBAC), role assign
 **Access:** Reader access initially, activated to a PIM-eligible Operative account<br>
 **Tools**: Azure Portal, Azure CLI, Azure Resource Graph, Kusto Query Language (KQL), Privileged Identity Management (PIM)
 
+### <em>Methodology Comparison</em>
+| Method               | Sees                                        | Misses                              |
+|----------------------|---------------------------------------------|-------------------------------------|
+| IAM blade / export   | Active assignments at scope, inherited      | Group members, orphaned principals  |
+| Azure CLI            | Same, plus null principalName (orphans)     | One scope per run                   |
+| Resource Graph (KQL) | Whole tenant in one query                   | Eligible assignments                |
+| PIM export           | Eligible vs active, activation history      | Assignments outside PIM             |
+
 ## 3. Findings & Observations
 ### Finding 01 — Abundance of Owner role assignments 
 **Audit Methodology:**
@@ -73,10 +81,6 @@ While being able to iterate entire subscriptions' role assignments with one quer
 **Recommendation:**<br>
 Along with using IAM auditing and Azure CLI commands to observe recurring access, I recommend using customized versions of my KQL query above to help dig deeper.
 
-
-
-
-
 ### Finding 04 — Privileged Identity Management
 **Audit Methodology:**
 Microsoft Entra Privileged Identity Management (PIM)
@@ -95,40 +99,36 @@ Inside my PIM assignments export, I noticed a principal name in this resource gr
 **Recommendation:**<br>
 Maintaining a regular audit of PIM allows us to be sure that potential privileges cannot be acquired by idle users and groups.
 
-<!--
+### Finding 05 — Over-provisioned Accounts
+**Audit Methodology:**
+Identity and Access Management (IAM), Privileged Identity Management (PIM), 
 
+While I was investigating this tenant's PIM interface, I stumbled across a resource group that required activated privileges. 
 
+I submitted an activation request on this RG for 1 hour. Once activated, I ran a previous CLI command to list all of a specific resource group's role assignments.<br>
+<code>az role assignment list --resource-group rg-'hiddenPIMgroup'</code> 
 
+**Discovery:**<br>
+Running my CLI command to list all role assignments in this PIM-activated resource group, I discovered that the same user from *Finding 01* has an Owner role in this resource group as well.
 
+**Limitations**<br>
+Given my time-limited with activated privileges, I was only able to deep dive the 'hidden' resource group.
+ 
+**Recommendation:**<br>
+A regular assessment is recommended of not just all active role assignments, but eligible assignments set in PIM as well.
 
+## What surprised me
+The shear amount of variation in tooling available for investigating role assignments provisioned to users and groups throughout a tenant.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-## What broke / what surprised me
-The most credible section in the document. Dead ends, wrong guesses, the thing that took an hour. Employers know real work is messy. This section separates you from certificate collectors.
-
-## Findings and recommendations
-What you determined, plus 2 or 3 recommendations as if you were reporting to the resource owner.
+The user-friendly interface of IAM allowed us to scratch the surface of our environment, but digging deeper with Azure CLI, Azure Resource Graph (KQL) and PIM-activated permissions proved to shed light on further issues with the same users having over-provisioned accounts on very important resources.
 
 ## What I learned
-3 to 5 bullets. At least one technical, one "what I'd do differently."
+- Azure's IAM interface is a good starting point, but it doesn't always show the full picture of who has access and where.
 
--->
+- Using Azure CLI, Resource Graph, KQL, and PIM helped me dig deeper and uncover additional role assignments and potential access concerns.
+
+- I learned the importance of understanding the difference between active and eligible role assignments, and how both need to be reviewed.
+
+- Excessive permissions can easily go unnoticed when access isn't regularly audited.
+
+- Most importantly, using multiple tools and approaches gives me a much better understanding of who has access to what, how they got it, and whether that access is actually necessary.
