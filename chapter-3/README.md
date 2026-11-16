@@ -72,6 +72,29 @@ While being able to iterate entire subscriptions' role assignments with one quer
 
 **Recommendation:**<br>
 Along with using IAM auditing and Azure CLI commands to observe recurring access, I recommend using customized versions of my KQL query above to help dig deeper.
+
+
+
+
+
+### Finding 04 — Privileged Identity Management
+**Audit Methodology:**
+Microsoft Entra Privileged Identity Management (PIM)
+
+Unlike the previous three methodologies, utilizing PIM allows us to better audit eligible role assignments. IAM, Azure CLI and our KQL query in the Resource Graph only were able to display currently active assignments.
+
+I ventured to the tenant's RBAC resource group and ran an export on all of the group's role assignments.
+
+
+![Screenshot of a spreadsheet of exported PIM assignments on a specific Azure resource group.](images/figure04.png)
+<em>Figure 04 - Spreadsheet of an Azure resource group's PIM role assignments.</em>
+
+**Discovery:**<br>
+Inside my PIM assignments export, I noticed a principal name in this resource group with a 'delete' label on it. I believe someone had meant to delete this role assignment. This role wasn't inherited either, which further makes me think someone manually created this assignment for a temporary task, but forgot to remove it later.
+ 
+**Recommendation:**<br>
+Maintaining a regular audit of PIM allows us to be sure that potential privileges cannot be acquired by idle users and groups.
+
 <!--
 
 
