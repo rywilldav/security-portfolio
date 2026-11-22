@@ -1,6 +1,6 @@
 # The Friday Deploy
 
-## Azure Role-Based Access Control (RBAC) | Identity & Access Management | Azure CLI | Privileged Identity Management (PIM)
+## Baseline Comparison | Configuration Drift Analysis | Azure Function Apps | Production Deployment Review
 
 ![Compute Review Outline](assets/briefing.svg)
 
@@ -13,7 +13,7 @@ I compared this particular deployment to the compute stack of our production bas
 ## 2. Scope & Methodology
 **Environment:** Mad Hat Labs - a live Azure training tenant<br>
 **Access:** Reader access to the production resource group<br>
-**Tools**: Azure Portal, Azure CLI, Azure Resource Graph, Kusto Query Language (KQL), Privileged Identity Management (PIM)
+**Tools**: Azure Portal, 
 
 ### <em>The Review Route</em>
 
@@ -26,67 +26,96 @@ There are five questiosn that can cover the biggest converns within every comput
 5. ...and what do we fix first?
 
 ![Infographic of a compute review route](assets/review-route.svg)
-<!--
+
 ## 3. Findings & Observations
-### Finding 01 — Abundance of Owner role assignments 
-**Audit Methodology:**
-Identity and Access Management (IAM)
+### Finding 01 — The **Where** 
 
-I began the audit with a baseline no-tooling approach first using the Access control (IAM) interface in the Azure portal. I exported the role assignments on my target subscriptions into a CSV file.
+| Properties | func-intern-notify                                        | func-madhat-shared                              |
+|----------------------|---------------------------------------------|-------------------------------------|
+| Location / Region   | Australia East (australiaeast)  | Central US (centralus)
+|      Status       | Running     | Running     |
+| App Service Plan | AustraliaEastLinuxDynamicPlan(Y1: 0)                   | CentralUSLinuxDynamicPlan(Y1: 0)                
 
-Redactions outlined in red below signify the <u>same</u> user account with Owner access on *multiple* subscriptions.
+### Overview of <em>func-intern-notify</em>
 
-![Screenshot of an Azure role assignments export from IAM](images/figure01.png)
-<em>Figure 01 - Redacted export of IAM role assignments inside targeted Azure tenant subscriptions.</em>
+![Screenshot of a function app overview: func-intern-notify](images/figure01.png)
+<em>Figure 01 - Redacted overview section of a function app named func-intern-notify.</em>
 
-**Discovery:**<br>
-This one user having Owner permissions to multiple subscriptions raises a major concern with how they acquired these permissions in the first place. Was this user's permissions applied manually or through a re-occurring script?
+### Overview of <em>func-madhat-shared</em>
 
-**Limitations:**<br>
-Given the methodology and my access level during this audit, my export did not authorize me to see the members inside of subscription groups, thus overlooking potential Owners inside of groups or potential orphaned users from deleted accounts.
-
-**Recommendation:**<br>
-Maintain a quarterly review with your security team to ensure that any unused, high-privileged accounts are removed and update any dynamic group scripts.
-
-
-### Finding 02 — The orphan account
-**Audit Methodology:**
-Azure CLI
-
-Since I wanted to investigate any deleted "orphan" accounts that could be living in the tenant, I decided to run a Powershell command to iterate through a specific resource group of which I had access.<br>
-<code>az role assignment list --resource-group rg-REDACTED</code>
+![Screenshot of a function app overview: func-madhat-shared](images/figure02.png)
+<em>Figure 02 - Redacted overview section of a function app named func-madhat-shared.</em>
 
 **Discovery:**<br>
-The resulting information yielded a role assignment object that had an empty value for it's principalName. This points towards a deleted "orphaned" account that still has permissions assigned to it.
+To answer the 'where' portion of our review, I compared the region locations of the intern's deployment with our production baseline. The intern had set their deployment's region to Australia East when the rest of production deploys to Central US.
 
-![Screenshot of Azure CLI role assignment command results](images/figure02.png)
-<em>Figure 02 - Screenshot of a role assignment of an orphaned user account with remaining permissions.</em>
-
-**Limitations:**<br>
-The scope I was limited to allowed me to only iterate through this one specific resource group with the CLI.
+The moving of data out (data egression) of Australia East back to other production resources in Central US would cause additional hidden Azure charges as well as increase the latency for every type of request being made to this function app. 
 
 **Recommendation:**<br>
-The Powershell command I ran can be turned into a script and repeated often at a scope larger than what I had access to in order to keep up to date with the presence of orphan accounts with permissions linked to them. 
+Change the intern's deployment region / location to Central US (centralus) to match our production baseline, func-madhat-shared.
 
-### Finding 03 — The orphan account
-**Audit Methodology:**
-Azure Resource Graph, Kusto Query Language (KQL)
 
-I used the Azure Resource Graph Explorer to run a KQL query that would allow me to sweep every resource tied to the orphan account's principalId.
+### Finding 02 — The **Who**
 
-The KQL query that I ran was:<br>
-![Screenshot of Azure Resource Graph running a KQL query](images/figure03.png)
-<em>Figure 03 - KQL query ran inside of a tenant's Azure Resource Graph filtering a specific principal id value.</em>
+| Managed Identities | func-intern-notify                                        | func-madhat-shared                              |
+|----------------------|---------------------------------------------|-------------------------------------|
+| System assigned   | Status: Off  | Status: Off
+|      User assigned       | N/A     | **id-madhat-shared**     |
+|          
 
 **Discovery:**<br>
-Using KQL, I am more quickly able to run a search on role assignments across all available scopes and return specific, filtered results.
+The purpose of reviewing the **who** is to find out how this deployment authenticates. The managed identities of the intern's deployment when weighed against the baseline showed me a lack of <u>both</u> <em>system assigned</em> identities and <em>user assigned</em> identities. 
 
-**Limitations:**<br>
-While being able to iterate entire subscriptions' role assignments with one query, KQL does not render 'eligible' role assignments, only active assignments. 
+The production baseline however; while it has no system assigned identities, it does have a single user assigned identity. As seen below:
+
+![Screenshot of a function app's system assigned identities dashboard.](images/figure03.png)
+<em>Figure 03 - Screen grab of a function app (func-intern-notify)'s system assigned identities dashboard.</em>
+
+<br>
+
+![Screenshot of a function app's user assigned identities dashboard.](images/figure04.png)
+<em>Figure 04 - Screen grab of a function app (func-intern-notify)'s user assigned identities dashboard.</em>
+
+<br>
+
+![Screenshot of a function app's system assigned identities dashboard.](images/figure05.png)
+<em>Figure 05 - Screen grab of a function app (func-madhat-shared)'s system assigned identities dashboard.</em>
+
+<br>
+
+![Screenshot of a function app's user assigned identities dashboard.](images/figure06.png)
+<em>Figure 06 - Screen grab of a function app (func-madhat-shared)'s user assigned identities dashboard. The single identity name information has been redacted.
+</em>
+
 
 **Recommendation:**<br>
-Along with using IAM auditing and Azure CLI commands to observe recurring access, I recommend using customized versions of my KQL query above to help dig deeper.
+It is always good practice to have one type of managed identity on any production deployed resource.
 
+### Finding 03 — The **Leak**
+**Discovery:**<br>
+Since I confirmed the intern's deployment had zero managed identities to handle authentication, I went looking to see what potential public-facing data could be found.
+
+Finding a storage account within the same resource group as func-intern-notify, I soon discovered a list of containers, one of which had it's **Anonymous access level** set to 'Blob' instead of 'Private', like the rest of the containers. This particular container's 'Name' was clearly belonging to the intern.
+
+![Screenshot of a storage account's container dashboard.](images/figure07.png)
+<em>Figure 07 - Screen grab of the intern's storage account with evidence of a publicly accessible container.</em>
+<br>
+
+Inside the non-private container was a single .txt file that contained some of the intern's notes. I opened up the .txt file to discover that the file's URL is in plaintext on the properties page.
+
+![Screenshot of a storage account's container contents properties page.](images/figure08.png)<br>
+<em>Figure 08 - Screen grab of the intern's storage account with a public facing .txt file containing it's plaintext URL.</em>
+<br>
+
+I wanted to actually prove the real exposure of this file, so I copied the URL and pasted it into a private browser window that has me signed into nothing. To my surprise, the URL directs me to the contents of the .txt file. No account sign-in or token required. Publicly exposed to the entire internet for anyone who scrapes this URL.
+
+![Screenshot of a public facing .txt file's contents revealing sensitive information.](images/figure09.png)<br>
+<em>Figure 09 - Screen grab of the intern's public facing .txt file's contents, providing information about the app's connection string.</em>
+<br>
+
+**Recommendation:**<br>
+The Anonymous access level of this deployment's storage account containers needs to be set to 'Private', no exceptions. Going back to a previous recommendation of using managed identities. Those would remove all need to jot down connection strings inside of .txt files.
+<!--
 ### Finding 04 — Privileged Identity Management
 **Audit Methodology:**
 Microsoft Entra Privileged Identity Management (PIM)
