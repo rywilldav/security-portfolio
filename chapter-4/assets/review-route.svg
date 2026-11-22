@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 175" width="100%" height="100%" role="img" aria-label="The Review Route Diagram">
+  <defs>
+    <style>
+      .outer-bg { fill: #0a0c10; }
+      .outer-border { stroke: #1c2433; stroke-width: 1.5; fill: none; }
+      .step-bg { fill: #0d1117; }
+      .mono {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      }
+      .header-text {
+        fill: #58a6ff;
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 1.4px;
+      }
+      .title-blue { fill: #58a6ff; font-size: 12.5px; font-weight: 700; }
+      .title-pink { fill: #d268cc; font-size: 12.5px; font-weight: 700; }
+      .title-red { fill: #ff7b72; font-size: 12.5px; font-weight: 700; }
+      .title-orange { fill: #ffa657; font-size: 12.5px; font-weight: 700; }
+      .title-green { fill: #3fb950; font-size: 12.5px; font-weight: 700; }
+      .sub-text {
+        fill: #8b949e;
+        font-size: 11px;
+        font-weight: 400;
+      }
+      .arrow {
+        fill: #58a6ff;
+        font-size: 15px;
+        font-weight: 700;
+      }
+    </style>
+  </defs>
+
+  
+  <rect x="2" y="2" width="916" height="171" rx="4" class="outer-bg" />
+  <rect x="2" y="2" width="916" height="171" rx="4" class="outer-border" />
+
+  
+  <text x="24" y="34" class="mono header-text">[ THE REVIEW ROUTE ]</text>
+
+  
+  <rect x="24" y="54" width="154" height="94" rx="4" class="step-bg" stroke="#2d4a77" stroke-width="1.2" />
+  <text x="101" y="80" text-anchor="middle" class="mono title-blue">1. THE WHERE</text>
+  <text x="101" y="102" text-anchor="middle" class="mono sub-text">is it even in the</text>
+  <text x="101" y="118" text-anchor="middle" class="mono sub-text">right place</text>
+
+  <text x="191" y="105" text-anchor="middle" class="mono arrow">&gt;</text>
+
+  
+  <rect x="204" y="54" width="154" height="94" rx="4" class="step-bg" stroke="#613363" stroke-width="1.2" />
+  <text x="281" y="80" text-anchor="middle" class="mono title-pink">2. THE WHO</text>
+  <text x="281" y="102" text-anchor="middle" class="mono sub-text">how it authenticates</text>
+
+  <text x="371" y="105" text-anchor="middle" class="mono arrow">&gt;</text>
+
+  
+  <rect x="384" y="54" width="154" height="94" rx="4" class="step-bg" stroke="#783434" stroke-width="1.2" />
+  <text x="461" y="80" text-anchor="middle" class="mono title-red">3. THE LEAK</text>
+  <text x="461" y="102" text-anchor="middle" class="mono sub-text">where its data</text>
+  <text x="461" y="118" text-anchor="middle" class="mono sub-text">actually sits</text>
+
+  <text x="551" y="105" text-anchor="middle" class="mono arrow">&gt;</text>
+
+  
+  <rect x="564" y="54" width="154" height="94" rx="4" class="step-bg" stroke="#734c26" stroke-width="1.2" />
+  <text x="641" y="80" text-anchor="middle" class="mono title-orange">4. THE DOOR</text>
+  <text x="641" y="102" text-anchor="middle" class="mono sub-text">who can reach it</text>
+
+  <text x="731" y="105" text-anchor="middle" class="mono arrow">&gt;</text>
+
+  
+  <rect x="744" y="54" width="154" height="94" rx="4" class="step-bg" stroke="#225433" stroke-width="1.2" />
+  <text x="821" y="80" text-anchor="middle" class="mono title-green">5. THE CALL</text>
+  <text x="821" y="102" text-anchor="middle" class="mono sub-text">what gets fixed today</text>
+</svg>

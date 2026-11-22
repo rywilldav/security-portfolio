@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1175" height="270" viewBox="0 0 1175 270">
+  <g font-family="Courier New, monospace" fill="#ffffff">
+    
+    <!-- Matrix green vertical border -->
+    <path d="M 10 15 V 255" stroke="#00ff41" stroke-width="4" fill="none"/>
+
+    <!-- Heading -->
+    <text x="45" y="40" font-size="14" letter-spacing="3">
+      [ DEPLOY REVIEW // THE FRIDAY DEPLOY ]
+    </text>
+
+    <!-- Case details -->
+    <text x="45" y="85" font-size="15">ROLE: Cloud Platform Engineer</text>
+    <text x="45" y="115" font-size="15">TICKET: Review func-intern-notify before prod promotion</text>
+    <text x="45" y="145" font-size="15">DEPLOYED: Friday, 4:57pm</text>
+    <text x="45" y="175" font-size="15">DEPLOYED BY: The intern. They said "it works."</text>
+    <text x="45" y="205" font-size="15">CLEARANCE: Reader on rg-madhat-lab-chap4</text>
+
+    <!-- Objective -->
+    <text x="45" y="235" font-size="15">
+      GOAL: Compare against the production baseline. Log every finding. Block the "ship to prod" if needed.
+    </text>
+
+  </g>
+</svg>
