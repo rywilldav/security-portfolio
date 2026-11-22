@@ -115,47 +115,59 @@ I wanted to actually prove the real exposure of this file, so I copied the URL a
 
 **Recommendation:**<br>
 The Anonymous access level of this deployment's storage account containers needs to be set to 'Private', no exceptions. Going back to a previous recommendation of using managed identities. Those would remove all need to jot down connection strings inside of .txt files.
+
+### Finding 04 — The **Door**
+
+**Discovery:**<br>
+After the discovery of the public facing .txt files, I then wanted to look into who is/was able to reach it. My first destination was the 'Networking' settings for the intern's function app. This would allow me to see it's inbound and outbound traffic configuration.
+
+The first properties listed in the 'Networking' settings are for inbound traffic. I notice immediately that the **Public network access** is set to <em>Enabled with no access restrictions</em>. The door is wide open to this app deployment and thus, anyone on the internet can access the aforementioned .txt file.
+
+![Screenshot of a function app's networking settings.](images/figure10.png)<br>
+<em>Figure 10 - Screen grab of the intern's function app (func-intern-notify) Networking settings, showing enabled and unrestricted public network access.</em>
+<br>
+
+Digging deeper into the inbound Public network access configuration, I go to the Access Restrictions dashboard. I notice a couple of things:<br>
+1.  The **Unmatched rule action**, which is the default behavior applied to incoming requests that do not match any defined access restriction rule, was set to 'Allow'. With no rules actually set in place, this unmatched rule action would fire 100% of the time.
+
+2. The bottom part of the Access Restrictions configuration page shows us the default **Action** and **Source** property values. 
+Source, being the origin of incoming traffic and Action being whether or not that source has access. The intern's function app had a Source value of 'Any' and an Action value of 'Allow'.
+
+It needs to be said, again, that the main job of this function app was to run a scheduled notification service. It has no need to take inbound requests, period.
+
+![Screenshot of a function app's Access Restrictions page under Networking settings](images/figure11.png)
+<em>Figure 11 - Screen grab of the intern's function app Access Restrictions dashboard.</em>
+<br>
+
+When comparing these Networking settings to our production baseline, Inbound public network access for the baseline is set to 'Enabled with access restrictions'. 
+
+Digging deeper, the Inbound traffic is configured with one baseline 'Deny' rule and one fallback 'Deny All' rule. With one or more rules defined, this sets our Unmatched rule action to implicitly 'Deny' unmatched traffic by default.
+
+![Screenshot of a function app's Access Restrictions page under Networking settings](images/figure12.png)
+<em>Figure 12 - Screen grab of the intern's function app Access Restrictions dashboard.</em>
+<br>
+
+**Recommendation:**<br>
+The Inbound traffic configuration for the intern's deployment needs to be set to 'Enabled with access restrictions' with the same 'Deny' rules set in place as the func-madhat-shared resource.
+
+
+
+### Finding 05 — The **Call**
+
+The last portion of the review route is the call, or the decision of **what gets fixed today**.
+
+### <em>Security Risk Comparison</em>
+| Priority <em>(1 highest - 4 lowest)</em>               | Finding                                        | Resolution                              |
+|----------------------|---------------------------------------------|-------------------------------------|
+|   1   | Publicly Exposed Container      | Container must be closed today  |
+| 2            | Open Front Door to currently unused connection string | Refrain from putting connection strings in plaintext files                   |
+ | 3                | No Managed Identities | Apply at least one managed identity to help with secret leak prevention
+|     4       | Wrong Region      | Update region / location next deployment    
+
+### Per the table above, my security risk priority and what needs to happen today is the closing of the container that holds the exposed .txt file.
 <!--
-### Finding 04 — Privileged Identity Management
-**Audit Methodology:**
-Microsoft Entra Privileged Identity Management (PIM)
-
-Unlike the previous three methodologies, utilizing PIM allows us to better audit eligible role assignments. IAM, Azure CLI and our KQL query in the Resource Graph only were able to display currently active assignments.
-
-I ventured to the tenant's RBAC resource group and ran an export on all of the group's role assignments.
-
-
-![Screenshot of a spreadsheet of exported PIM assignments on a specific Azure resource group.](images/figure04.png)
-<em>Figure 04 - Spreadsheet of an Azure resource group's PIM role assignments.</em>
-
-**Discovery:**<br>
-Inside my PIM assignments export, I noticed a principal name in this resource group with a 'delete' label on it. I believe someone had meant to delete this role assignment. This role wasn't inherited either, which further makes me think someone manually created this assignment for a temporary task, but forgot to remove it later.
- 
-**Recommendation:**<br>
-Maintaining a regular audit of PIM allows us to be sure that potential privileges cannot be acquired by idle users and groups.
-
-### Finding 05 — Over-provisioned Accounts
-**Audit Methodology:**
-Identity and Access Management (IAM), Privileged Identity Management (PIM), 
-
-While I was investigating this tenant's PIM interface, I stumbled across a resource group that required activated privileges. 
-
-I submitted an activation request on this RG for 1 hour. Once activated, I ran a previous CLI command to list all of a specific resource group's role assignments.<br>
-<code>az role assignment list --resource-group rg-'hiddenPIMgroup'</code> 
-
-**Discovery:**<br>
-Running my CLI command to list all role assignments in this PIM-activated resource group, I discovered that the same user from *Finding 01* has an Owner role in this resource group as well.
-
-**Limitations**<br>
-Given my time-limited with activated privileges, I was only able to deep dive the 'hidden' resource group.
- 
-**Recommendation:**<br>
-A regular assessment is recommended of not just all active role assignments, but eligible assignments set in PIM as well.
-
 ## What surprised me
-The shear amount of variation in tooling available for investigating role assignments provisioned to users and groups throughout a tenant.
-
-The user-friendly interface of IAM allowed us to scratch the surface of our environment, but digging deeper with Azure CLI, Azure Resource Graph (KQL) and PIM-activated permissions proved to shed light on further issues with the same users having over-provisioned accounts on very important resources.
+What surprised me about this deployment review was .
 
 ## What I learned
 - Azure's IAM interface is a good starting point, but it doesn't always show the full picture of who has access and where.
