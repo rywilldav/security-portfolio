@@ -165,18 +165,15 @@ The last portion of the review route is the call, or the decision of **what gets
 |     4       | Wrong Region      | Update region / location next deployment    
 
 ### Per the table above, my security risk priority and what needs to happen today is the closing of the container that holds the exposed .txt file.
-<!--
+
 ## What surprised me
-What surprised me about this deployment review was .
+What surprised me about this deployment review was reading an app secret that was this exposed to the public. It was fortunate that the app didn't have any routes set up that could be authenticated with this secret.
 
 ## What I learned
-- Azure's IAM interface is a good starting point, but it doesn't always show the full picture of who has access and where.
+- Choosing the wrong region for a deployment could accrue hidden costs quickly if data is being egressed out of the resource all the time.
 
-- Using Azure CLI, Resource Graph, KQL, and PIM helped me dig deeper and uncover additional role assignments and potential access concerns.
+- Simple .txt files that contain crucial information need to be just as high of a priority from a security standpoint.
 
-- I learned the importance of understanding the difference between active and eligible role assignments, and how both need to be reviewed.
+- Managed Identities take a lot of the headache and risk out of maintaining app secrets and credentials.
 
-- Excessive permissions can easily go unnoticed when access isn't regularly audited.
-
-- Most importantly, using multiple tools and approaches gives me a much better understanding of who has access to what, how they got it, and whether that access is actually necessary.
--->
+- Maintaining a **baseline** to compare future deployments to is a must in order to ensure the same security standards are applied across the board.
